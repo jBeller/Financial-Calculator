@@ -1,4 +1,6 @@
-#pragma once
+#ifndef __USER_H__
+#define __USER_H__
+
 #include <unordered_map>
 #include <list>
 #include "Entry.h"
@@ -38,4 +40,6 @@ public:
 	void u_remove_entry(string name);
 	bool u_entry_exists(string name);
 };
+
+#endif  // __USER_H__
 

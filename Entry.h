@@ -1,4 +1,6 @@
-#pragma once
+#ifndef __ENTRY_H__
+#define __ENTRY_H__
+
 #include <string>
 #include <ctime>
 #include <cmath>
@@ -36,3 +38,5 @@ public:
 	void e_modify_start_date(time_t start) { e_start_date = start; }
 	void e_modify_end_date(time_t end) { e_end_date = end; }
 };
+
+#endif  // __ENTRY_H__

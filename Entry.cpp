@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "Entry.h"
 
 double Entry::e_calculate_value()
