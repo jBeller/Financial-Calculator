@@ -19,6 +19,8 @@
 #include <wx/menu.h>
 #include <wx/frame.h>
 
+#include "AddEditEntryDialog.h"
+
 class MainFrame : public wxFrame
 {
 private:
@@ -34,6 +36,8 @@ private:
 	wxMenuBar* mf_menubar;
 	wxMenu* mf_mb_file_menu;
 	wxMenu* mf_mb_help_menu;
+protected:
+	void mf_add_entry_dialog(wxCommandEvent& event);
 public:
 	MainFrame(wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Financial Calculator"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize(477, 314), long style = wxDEFAULT_FRAME_STYLE | wxTAB_TRAVERSAL);
 	~MainFrame();

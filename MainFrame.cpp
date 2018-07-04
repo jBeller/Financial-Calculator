@@ -97,7 +97,17 @@ MainFrame::MainFrame(wxWindow* parent, wxWindowID id, const wxString& title, con
 
 
 	this->Centre(wxBOTH);
+
+	// Connect Events
+	mf_tree_add_button->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::mf_add_entry_dialog), NULL, this);
 }
 MainFrame::~MainFrame()
 {
+	// Disconnect Events
+	mf_tree_add_button->Disconnect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::mf_add_entry_dialog), NULL, this);
+}
+void MainFrame::mf_add_entry_dialog(wxCommandEvent& event)
+{
+	AddEditEntryDialog dlg(this);
+	dlg.ShowModal();
 }
