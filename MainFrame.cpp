@@ -14,9 +14,8 @@ MainFrame::MainFrame(wxWindow* parent, wxWindowID id, const wxString& title, con
 	wxBoxSizer* mf_tree_bSizer;
 	mf_tree_bSizer = new wxBoxSizer(wxVERTICAL);
 
+	mf_tree_bSizer->SetMinSize(wxSize(400, 370));
 	mf_data_tree = new wxDataViewCtrl(mf_tree_panel, wxID_ANY, wxDefaultPosition, wxSize(-1, -1), 0);
-	mf_data_tree->SetMinSize(wxSize(300, 200));
-
 	mf_tree_bSizer->Add(mf_data_tree, 1, wxALL | wxEXPAND, 5);
 
 	wxBoxSizer* mf_tree_buttons_bSizer;
@@ -26,6 +25,8 @@ MainFrame::MainFrame(wxWindow* parent, wxWindowID id, const wxString& title, con
 	mf_tree_buttons_bSizer->Add(mf_tree_add_button, 0, wxALL | wxALIGN_CENTER_HORIZONTAL, 5);
 
 	mf_tree_remove_button = new wxButton(mf_tree_panel, wxID_ANY, wxT("Remove"), wxDefaultPosition, wxDefaultSize, 0);
+	mf_tree_remove_button->Enable(false);
+
 	mf_tree_buttons_bSizer->Add(mf_tree_remove_button, 0, wxALL | wxALIGN_CENTER_HORIZONTAL, 5);
 
 
@@ -99,11 +100,14 @@ MainFrame::MainFrame(wxWindow* parent, wxWindowID id, const wxString& title, con
 
 	this->SetMenuBar(mf_menubar);
 
-
 	this->Centre(wxBOTH);
 
 	// Connect Events
+	mf_data_tree->Connect(wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, wxDataViewEventHandler(MainFrame::mf_modify_entry), NULL, this);
 	mf_tree_add_button->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::mf_add_entry_dialog), NULL, this);
+	mf_tree_remove_button->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::mf_remove_entry), NULL, this);
+	mf_calculate_button->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::mf_calculate_outlook), NULL, this);
+	this->Connect(mf_hm_about->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MainFrame::mf_show_about));
 	this->Connect(mf_hm_sample->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MainFrame::mf_add_samples));
 
 	mf_current_user = new User("Foobar");
@@ -121,16 +125,68 @@ MainFrame::MainFrame(wxWindow* parent, wxWindowID id, const wxString& title, con
 MainFrame::~MainFrame()
 {
 	// Disconnect Events
+	mf_data_tree->Disconnect(wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, wxDataViewEventHandler(MainFrame::mf_modify_entry), NULL, this);
 	mf_tree_add_button->Disconnect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::mf_add_entry_dialog), NULL, this);
+	mf_tree_remove_button->Disconnect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::mf_remove_entry), NULL, this);
+	mf_calculate_button->Disconnect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MainFrame::mf_calculate_outlook), NULL, this);
+	this->Disconnect(wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MainFrame::mf_show_about));
 	this->Disconnect(wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MainFrame::mf_add_samples));
 
 	mf_data_model->DecRef();
 	delete mf_current_user;
 }
+void MainFrame::mf_modify_entry(wxDataViewEvent & event)
+{
+	///TODO: Write code here
+}
 void MainFrame::mf_add_entry_dialog(wxCommandEvent& event)
 {
 	AddEditEntryDialog dlg(this);
-	dlg.ShowModal();
+	EntryDataModel* data = (EntryDataModel*)mf_data_model;
+	wxString str, str1("$");
+
+	if (dlg.ShowModal() == wxOK)
+	{
+		str = dlg.d_get_entry_name();
+		str1 << dlg.d_get_entry_value();
+		mf_current_user->u_insert_entry(str.ToStdString(), dlg.d_get_entry_type(), dlg.d_get_entry_time(), dlg.d_get_entry_value(), dlg.d_get_entry_start(), dlg.d_get_entry_start());
+
+		switch (dlg.d_get_entry_time())
+		{
+		case EntryTime::WEEKLY:
+			str1.append("/week");
+			break;
+		case EntryTime::MONTHLY:
+			str1.append("/month");
+			break;
+		case EntryTime::BIANNUALLY:
+			str1.append("/6 months");
+			break;
+		case EntryTime::ANNUALLY:
+			str1.append("/year");
+			break;
+		default:
+			str1.append("/??");
+			break;
+		}
+
+		if (dlg.d_get_entry_type() == EntryType::INCOME)
+			data->InsertIncome(str, str1);
+		else if (dlg.d_get_entry_type() == EntryType::EXPENSE)
+			data->InsertExpense(str, str1);
+	}
+}
+void MainFrame::mf_remove_entry(wxCommandEvent & event)
+{
+	///TODO: Write code here
+}
+void MainFrame::mf_calculate_outlook(wxCommandEvent & event)
+{
+	///TODO: Write code here
+}
+void MainFrame::mf_show_about(wxCommandEvent & event)
+{
+	wxMessageBox(_("The Financial Calculator is a project made by James Beller.\nIt was made with wxWidgets 3.0.1 with the help of wxFormBuilder and Microsoft Visual Studio 2017. The program was written in C++"), _("About"));
 }
 void MainFrame::mf_add_samples(wxCommandEvent& event)
 {

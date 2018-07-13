@@ -43,10 +43,14 @@ private:
 	User* mf_current_user;
 	wxDataViewModel* mf_data_model;
 protected:
+	void mf_modify_entry(wxDataViewEvent& event);
 	void mf_add_entry_dialog(wxCommandEvent& event);
+	void mf_remove_entry(wxCommandEvent& event);
+	void mf_calculate_outlook(wxCommandEvent& event);
+	void mf_show_about(wxCommandEvent& event);
 	void mf_add_samples(wxCommandEvent& event);
 public:
-	MainFrame(wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Financial Calculator"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize(477, 314), long style = wxDEFAULT_FRAME_STYLE | wxTAB_TRAVERSAL);
+	MainFrame(wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Financial Calculator"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize(571, 434), long style = wxDEFAULT_FRAME_STYLE | wxTAB_TRAVERSAL);
 	~MainFrame();
 };
 

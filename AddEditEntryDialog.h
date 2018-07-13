@@ -19,6 +19,8 @@
 #include <wx/button.h>
 #include <wx/dialog.h>
 
+#include "User.h"
+
 class AddEditEntryDialog : public wxDialog
 {
 private:
@@ -44,12 +46,28 @@ private:
 	wxPanel* d_buttons_panel;
 	wxButton* d_ok_button;
 	wxButton* d_cancel_button;
+
+	User* d_cur_user;
+	wxString d_entry_name;
+	EntryType d_entry_type;
+	EntryTime d_entry_time;
+	double d_entry_value;
+	time_t d_entry_start;
+	time_t d_entry_end;
 protected:
 	void d_clicked_ok(wxCommandEvent& event);
 	void d_clicked_cancel(wxCommandEvent& event);
 public:
 	AddEditEntryDialog(wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Add/Edit Entry"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize(-1, -1), long style = wxDEFAULT_DIALOG_STYLE);
 	~AddEditEntryDialog();
+
+	void d_set_cur_user(User* u) { d_cur_user = u; }
+	wxString d_get_entry_name() const { return d_entry_name; }
+	EntryType d_get_entry_type() const { return d_entry_type; }
+	EntryTime d_get_entry_time() const { return d_entry_time; }
+	double d_get_entry_value() const { return d_entry_value; }
+	time_t d_get_entry_start() const { return d_entry_start; }
+	time_t d_get_entry_end() const { return d_entry_end; }
 };
 
 #endif  // __ADDEDITENTRYDIALOG__

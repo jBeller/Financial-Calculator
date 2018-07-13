@@ -155,6 +155,50 @@ AddEditEntryDialog::~AddEditEntryDialog()
 }
 void AddEditEntryDialog::d_clicked_ok(wxCommandEvent& event)
 {
+	wxString str;
+	wxDateTime date;
+
+	d_entry_name = d_name_ctrl->GetLineText(0);
+
+	if (d_type_choice->GetSelection() == 0)       // INCOME
+		d_entry_type = EntryType::INCOME;
+	else if (d_type_choice->GetSelection() == 1)  // EXPENSE
+		d_entry_type = EntryType::EXPENSE;
+
+	switch (d_period_choice->GetSelection())
+	{
+	case 0:   // WEEKLY
+		d_entry_time = EntryTime::WEEKLY;
+		break;
+	case 1:   // MONTHLY
+		d_entry_time = EntryTime::MONTHLY;
+		break;
+	case 2:   // BIANNUALLY
+		d_entry_time = EntryTime::BIANNUALLY;
+		break;
+	case 3:   // ANNUALLY
+		d_entry_time = EntryTime::ANNUALLY;
+		break;
+	default:  // Error
+		break;
+	}
+
+	str = d_value_ctrl->GetLineText(0);
+	str.ToDouble(&d_entry_value);
+
+	date = d_start_date_picker->GetValue();
+	d_entry_start = date.GetTicks();
+
+	if (d_indefinite_check_box->GetValue())
+		d_entry_end = 0;
+	else
+	{
+		date = d_end_date_picker->GetValue();
+		d_entry_end = date.GetTicks();
+	}
+
+	///TODO: Add error checking
+
 	EndModal(wxOK);
 }
 void AddEditEntryDialog::d_clicked_cancel(wxCommandEvent& event)
